@@ -1,6 +1,3 @@
-body {
-  background: linear-gradient(90deg, #6dd5ed, #2193b0);
-}
 
 @keyframes modalFadeIn {
   0% {
@@ -59,7 +56,7 @@ body {
 
 
 .p-button {
-  background-color: #003cff;
+  background-color: #ffffff;
   color: #fff;
   border: none;
   border-radius: 25px;

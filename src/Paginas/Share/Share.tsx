@@ -24,10 +24,11 @@ const Share = () => {
       <img
         src={B3Logo}
         alt="Logo B3"
-        style={{ width: "600px", borderRadius: "5px", marginBottom: "100px" }}
+        style={{ width: "500px", borderRadius: "5px", marginBottom: "50px" }}
       />
       <div className="acao-input">
-        <label htmlFor="codigoAcao"><b>Código da Ação:</b></label>
+        <label htmlFor="codigoAcao"><b>Código da Ação</b></label>
+        <br/>
         <InputText
           id="codigoAcao"
           style={{ width: "800px" }}
@@ -37,6 +38,7 @@ const Share = () => {
         />
         {error && <Message severity="error" text={error} />}
       </div>
+      <br/>
       {codigoAcao && !error && <ShareComponent symbol={codigoAcao} />}
     </div>
   );

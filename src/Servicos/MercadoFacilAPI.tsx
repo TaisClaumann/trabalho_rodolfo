@@ -3,7 +3,7 @@ import { LoginData } from '../Interfaces/LoginData';
 import { Usuario } from '../Interfaces/Usuario';
 
 const apiClient = axios.create({
-    baseURL: 'https://6z5hd4hf-5165.brs.devtunnels.ms/api',
+    baseURL: 'https://cqdz4sb6-5165.brs.devtunnels.ms/',
     headers: {
         'Content-Type': 'application/json'
     }
@@ -44,6 +44,7 @@ export const getAcaoPorCodigo = async (symbol: string) => {
         throw error;
     }
 }
+
 export const buscarAcoes = async (page: number, resultsByPage: number) => {
     try {
         const response = await apiClient.get(`/Share/${page}, ${resultsByPage}`,
@@ -53,12 +54,14 @@ export const buscarAcoes = async (page: number, resultsByPage: number) => {
                 }
             }
         );
+        console.log(response);
         return response.data;
     } catch (error) {
         console.error('Erro ao retornar lista de ações paginada: ', error);
         throw error;
     }
 }
+
 export const listarAcoes = async () => {
     try {
         const response = await apiClient.get(`/Share`,

@@ -5,11 +5,11 @@ import AcaoDisplay from "../ShareDisplay/ShareDisplay";
 
 const Acao: React.FC<ShareProps> = ({ symbol }) => {
   const [data, setData] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean | null>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let timer: any;
+    let timer: NodeJS.Timeout;
 
     const fetchData = async () => {
       try {
@@ -25,7 +25,7 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
         clearTimeout(timer);
         setData(data);
         setLoading(false);
-      } catch (err:any) {
+      } catch (err: any) {
         setError(err.message);
         setLoading(false);
       }
@@ -36,20 +36,35 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
     return () => clearTimeout(timer);
   }, [symbol]);
 
-  if (loading) return <div>Loading ...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center h-full">
+          <span className="text-lg text-gray-500">Loading ...</span>
+        </div>
+    );
+  }
+
+  if (error) {
+    return (
+        <div className="flex items-center justify-center h-full">
+          <span className="text-lg text-red-500">Error: {error}</span>
+        </div>
+    );
+  }
 
   return (
-    <AcaoDisplay
-      logoUrl={data?.logourl}
-      symbol={data?.symbol}
-      shortName={data?.shortName}
-      currency={data?.currency}
-      regularMarketPrice={data?.regularMarketPrice}
-      regularMarketDayRange={data?.regularMarketDayRange}
-      regularMarketDayHigh={data?.regularMarketDayHigh}
-    />
-  ); 
+      <div className="p-4 bg-white rounded-lg shadow-md">
+        <AcaoDisplay
+            logoUrl={data?.logourl}
+            symbol={data?.symbol}
+            shortName={data?.shortName}
+            currency={data?.currency}
+            regularMarketPrice={data?.regularMarketPrice}
+            regularMarketDayRange={data?.regularMarketDayRange}
+            regularMarketDayHigh={data?.regularMarketDayHigh}
+        />
+      </div>
+  );
 };
 
 export default Acao;

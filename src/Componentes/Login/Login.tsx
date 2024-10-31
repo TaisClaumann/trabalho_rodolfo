@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { LoginData } from "../../Interfaces/LoginData";
 import { LoginAPI } from "../../Servicos/MercadoFacilAPI";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { FloatLabel } from 'primereact/floatlabel';
-import "./Login.css";
 
 const Login = () => {
     const [loginData, setLoginData] = useState<LoginData>({
@@ -29,32 +25,51 @@ const Login = () => {
                 sessionStorage.setItem('token', response.data.token);
                 const testeRecuperaDado = sessionStorage.getItem('token');
                 alert('Dado Recuperado do session storage: ' + testeRecuperaDado);
-            }
-            else {
+            } else {
                 alert('Falha no login');
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.error('Falha no login' + e);
         }
     }
 
     return (
-        <div className="login-container">
-            <form className="row">
-                <div className="field col-12 mb-4">
-                    <FloatLabel>
-                        <InputText id="email" name="email" value={loginData.email} onChange={handleLogin} />
-                        <label htmlFor="email">Email</label>
-                    </FloatLabel>
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+            <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm" onSubmit={handleSubmit}>
+                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={loginData.email}
+                        onChange={handleLogin}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                        required
+                    />
                 </div>
-                <div className="field col-12 mb-4">
-                    <FloatLabel>
-                        <InputText id="senha" name="password" type="password" value={loginData.password} onChange={handleLogin} />
-                        <label htmlFor="senha">Senha</label>
-                    </FloatLabel>
+
+                <div className="mb-4">
+                    <label htmlFor="senha" className="block text-sm font-medium text-gray-700">Senha</label>
+                    <input
+                        id="senha"
+                        name="password"
+                        type="password"
+                        value={loginData.password}
+                        onChange={handleLogin}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                        required
+                    />
                 </div>
-                <Button label="Entrar" onClick={handleSubmit} className=" p-mt-4" />
+
+                <button
+                    type="submit"
+                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+                >
+                    Entrar
+                </button>
             </form>
         </div>
     );

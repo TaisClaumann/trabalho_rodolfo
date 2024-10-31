@@ -1,128 +1,104 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { CriarUsuario } from "../../Servicos/MercadoFacilAPI";
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { Fieldset } from 'primereact/fieldset';
-import { Accordion, AccordionTab } from 'primereact/accordion';
-import { FloatLabel } from 'primereact/floatlabel';
-import './Usuario.css';
 
 const Usuario = () => {
-
     const { register, handleSubmit, control } = useForm();
     const { fields, append, remove } = useFieldArray({
         control,
         name: "addresses"
     });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = async (data: any) => {
         console.log(data);
         try {
-            CriarUsuario(data);
+            await CriarUsuario(data);
+            // Aqui você pode adicionar um feedback ao usuário após o envio.
         } catch (error) {
             console.error(error);
         }
     };
 
     return (
-        <div className="container">
-            <form onSubmit={handleSubmit(onSubmit)}>
-                
+        <div className="container mx-auto p-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
                 {/* Dados de Acesso */}
-                <Fieldset legend="Dados de Acesso do Usuário">
-                    <div className="p-fluid grid">
-                        <div className="col-12 md:col-6">
-                            <FloatLabel>
-                                <InputText id="name" {...register("name")} />
-                                <label htmlFor="name">Nome</label>
-                            </FloatLabel>
+                <fieldset className="border p-4 rounded-lg">
+                    <legend className="text-lg font-semibold">Dados de Acesso do Usuário</legend>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="name" className="block mb-1">Nome</label>
+                            <input id="name" {...register("name")} className="w-full p-2 border rounded" />
                         </div>
-                        <div className="col-12 md:col-6">
-                            <FloatLabel>
-                                <InputText id="email" {...register("email")} />
-                                <label htmlFor="email">Email</label>
-                            </FloatLabel>
+                        <div>
+                            <label htmlFor="email" className="block mb-1">Email</label>
+                            <input id="email" {...register("email")} className="w-full p-2 border rounded" />
                         </div>
-                        <div className="col-12 md:col-6">
-                            <FloatLabel>
-                                <InputText id="password" {...register("password")} type="password" />
-                                <label htmlFor="password">Senha</label>
-                            </FloatLabel>
+                        <div>
+                            <label htmlFor="password" className="block mb-1">Senha</label>
+                            <input id="password" {...register("password")} type="password" className="w-full p-2 border rounded" />
                         </div>
-                        <div className="col-12 md:col-6">
-                            <FloatLabel>
-                                <InputText id="role" {...register("role")} />
-                                <label htmlFor="role">Role</label>
-                            </FloatLabel>
+                        <div>
+                            <label htmlFor="role" className="block mb-1">Role</label>
+                            <input id="role" {...register("role")} className="w-full p-2 border rounded" />
                         </div>
                     </div>
-                </Fieldset>
+                </fieldset>
 
-                <Accordion multiple={false}>
-                    <AccordionTab header="Endereços" className="address-accordion">
-                        {fields.map((field, index) => (
-                            <div key={field.id} className="p-fluid grid">
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`street-${index}`} {...register(`addresses[${index}].street`)} />
-                                        <label htmlFor={`street-${index}`}>Rua</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`number-${index}`} {...register(`addresses[${index}].number`)} />
-                                        <label htmlFor={`number-${index}`}>Número</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`complement-${index}`} {...register(`addresses[${index}].complement`)} />
-                                        <label htmlFor={`complement-${index}`}>Complemento</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`neighborhood-${index}`} {...register(`addresses[${index}].neighborhood`)} />
-                                        <label htmlFor={`neighborhood-${index}`}>Vizinhança</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`city-${index}`} {...register(`addresses[${index}].city`)} />
-                                        <label htmlFor={`city-${index}`}>Cidade</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`state-${index}`} {...register(`addresses[${index}].state`)} />
-                                        <label htmlFor={`state-${index}`}>Estado</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`country-${index}`} {...register(`addresses[${index}].country`)} />
-                                        <label htmlFor={`country-${index}`}>País</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`zipCode-${index}`} {...register(`addresses[${index}].zipCode`)} />
-                                        <label htmlFor={`zipCode-${index}`}>CEP</label>
-                                    </FloatLabel>
-                                </div>
-                                <div className="col-12 md:col-6">
-                                    <FloatLabel>
-                                        <InputText id={`district-${index}`} {...register(`addresses[${index}].district`)} />
-                                        <label htmlFor={`district-${index}`}>Bairro</label>
-                                    </FloatLabel>
-                                </div>
-                                <Button type="button" label="Remover Endereço" className="p-button-danger mt-2 mb-5 " onClick={() => remove(index)} />
+                {/* Endereços */}
+                <div className="border p-4 rounded-lg">
+                    <h2 className="text-lg font-semibold mb-2">Endereços</h2>
+                    {fields.map((field, index) => (
+                        <div key={field.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label htmlFor={`street-${index}`} className="block mb-1">Rua</label>
+                                <input id={`street-${index}`} {...register(`addresses[${index}].street`)} className="w-full p-2 border rounded" />
                             </div>
-                        ))}
-                        <Button type="button" label="Adicionar Endereço" className="p-button-secondary" onClick={() => append({})} />
-                    </AccordionTab>
-                </Accordion>
-                <Button type="submit" label="Enviar" className="p-button-success mt-3" />
+                            <div>
+                                <label htmlFor={`number-${index}`} className="block mb-1">Número</label>
+                                <input id={`number-${index}`} {...register(`addresses[${index}].number`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`complement-${index}`} className="block mb-1">Complemento</label>
+                                <input id={`complement-${index}`} {...register(`addresses[${index}].complement`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`neighborhood-${index}`} className="block mb-1">Vizinhança</label>
+                                <input id={`neighborhood-${index}`} {...register(`addresses[${index}].neighborhood`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`city-${index}`} className="block mb-1">Cidade</label>
+                                <input id={`city-${index}`} {...register(`addresses[${index}].city`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`state-${index}`} className="block mb-1">Estado</label>
+                                <input id={`state-${index}`} {...register(`addresses[${index}].state`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`country-${index}`} className="block mb-1">País</label>
+                                <input id={`country-${index}`} {...register(`addresses[${index}].country`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`zipCode-${index}`} className="block mb-1">CEP</label>
+                                <input id={`zipCode-${index}`} {...register(`addresses[${index}].zipCode`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <div>
+                                <label htmlFor={`district-${index}`} className="block mb-1">Bairro</label>
+                                <input id={`district-${index}`} {...register(`addresses[${index}].district`)} className="w-full p-2 border rounded" />
+                            </div>
+                            <button type="button" className="mt-2 bg-red-600 text-white rounded px-4 py-2" onClick={() => remove(index)}>
+                                Remover Endereço
+                            </button>
+                        </div>
+                    ))}
+                    <button type="button" className="bg-gray-600 text-white rounded px-4 py-2" onClick={() => append({})}>
+                        Adicionar Endereço
+                    </button>
+                </div>
+
+                <button type="submit" className="bg-green-600 text-white rounded px-4 py-2 mt-4">
+                    Enviar
+                </button>
             </form>
         </div>
     );

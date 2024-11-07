@@ -26,13 +26,12 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
         setData(data);
         setLoading(false);
       } catch (err: any) {
-        setError(err.message);
+          setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
-
     fetchData();
-
     return () => clearTimeout(timer);
   }, [symbol]);
 

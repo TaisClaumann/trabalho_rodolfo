@@ -14,7 +14,7 @@ const Login = () => {
             ...loginData,
             [name]: value
         });
-    }
+    };
 
     const handleSubmit = async (event: React.MouseEventHandler<HTMLButtonElement> | any) => {
         event.preventDefault();
@@ -23,43 +23,44 @@ const Login = () => {
             if (response.data && response.status === 200) {
                 alert('Login realizado com sucesso');
                 sessionStorage.setItem('token', response.data.token);
-                const testeRecuperaDado = sessionStorage.getItem('token');
-                alert('Dado Recuperado do session storage: ' + testeRecuperaDado);
             } else {
                 alert('Falha no login');
             }
         } catch (e) {
-            console.error('Falha no login' + e);
+            console.error('Falha no login: ', e);
         }
-    }
+    };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
-            <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm" onSubmit={handleSubmit}>
-                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <div className="flex items-center justify-center h-screen w-96 bg-gray-900">
+            <form
+                className="bg-gray-800 text-white p-10 rounded-lg shadow-lg w-full max-w-lg"
+                onSubmit={handleSubmit}
+            >
+                <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">Login</h2>
 
                 <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                    <label htmlFor="email" className="block text-sm text-left font-medium text-gray-300">Email</label>
                     <input
                         id="email"
                         name="email"
                         type="email"
                         value={loginData.email}
                         onChange={handleLogin}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                        className="mt-1 block w-full bg-gray-700 text-white border border-gray-600 rounded-md shadow-sm p-4 h-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
 
-                <div className="mb-4">
-                    <label htmlFor="senha" className="block text-sm font-medium text-gray-700">Senha</label>
+                <div className="mb-6">
+                    <label htmlFor="password" className="block text-sm text-left font-medium text-gray-300">Senha</label>
                     <input
-                        id="senha"
+                        id="password"
                         name="password"
                         type="password"
                         value={loginData.password}
                         onChange={handleLogin}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                        className="mt-1 block w-full bg-gray-700 text-white border border-gray-600 rounded-md shadow-sm p-4 h-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
@@ -73,6 +74,6 @@ const Login = () => {
             </form>
         </div>
     );
-}
+};
 
 export default Login;

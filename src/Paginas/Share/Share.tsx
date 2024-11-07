@@ -18,19 +18,19 @@ const Share = () => {
     };
 
     return (
-        <div className="flex flex-col items-center p-6">
+        <div className="flex flex-col items-center">
             <img
                 src={B3Logo}
                 alt="Logo B3"
-                className="w-80 rounded-lg mb-12"
+                className="w-6/12 rounded-lg mb-12"
             />
             <div className="w-full max-w-md mb-6">
-                <label htmlFor="codigoAcao" className="block text-lg font-bold mb-2">
+                <label htmlFor="codigoAcao" className="block text-lg text-left font-bold mb-2">
                     Código da Ação
                 </label>
                 <input
                     id="codigoAcao"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 w-96 border border-gray-300 rounded"
                     placeholder="Digite o código da ação (Exemplo: PETR4, BOVA11)"
                     value={codigoAcao}
                     onChange={handleChange}

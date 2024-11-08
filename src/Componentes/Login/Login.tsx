@@ -32,7 +32,7 @@ const Login = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen w-96 bg-gray-900">
+        <div className="flex items-center justify-center h-96 w-96 bg-gray-900">
             <form
                 className="bg-gray-800 text-white p-10 rounded-lg shadow-lg w-full max-w-lg"
                 onSubmit={handleSubmit}
@@ -52,7 +52,7 @@ const Login = () => {
                     />
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-4">
                     <label htmlFor="password" className="block text-sm text-left font-medium text-gray-300">Senha</label>
                     <input
                         id="password"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {buscarAcoesFavoritas} from "../../Servicos/MercadoFacilAPI";
+import { buscarAcoes } from "../../Servicos/MercadoFacilAPI";
 import AcaoDisplay from '../ShareDisplay/ShareDisplay';
 
 interface Acao {
@@ -12,7 +12,7 @@ interface Acao {
   regularMarketDayHigh: number;
 }
 
-const ShareList: React.FC = () => {
+const ShareFavList: React.FC = () => {
   const [acoes, setAcoes] = useState<Acao[]>([]);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
@@ -24,7 +24,7 @@ const ShareList: React.FC = () => {
     const fetchAcoes = async () => {
       try {
         setLoading(true);
-        const data = await buscarAcoesFavoritas(page, resultsByPage);
+        const data = await buscarAcoes(page, resultsByPage);
 
         setAcoes(data.items);
         setTotalRecords(data.totalCount);
@@ -92,4 +92,4 @@ const ShareList: React.FC = () => {
   );
 };
 
-export default ShareList;
+export default ShareFavList;

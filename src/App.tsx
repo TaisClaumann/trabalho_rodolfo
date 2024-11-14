@@ -3,9 +3,9 @@ import CadastroUsuario from "./Paginas/CadastroUsuario/CadastroUsuario";
 import Home from './Paginas/Home/Home'
 import Share from './Paginas/Share/Share'
 import SharesPage from "./Paginas/ShareList/ShareList";
-import './App.css'
 import Navbar from "./Componentes/NavBar/NavBar.tsx";
-
+import SharesFavPage from "./Paginas/ShareFavList/ShareFavList.tsx";
+import './App.css'
 
 const App = () => {
     return (
@@ -16,6 +16,7 @@ const App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/share" element={<Share />} />
                     <Route path="/shareList" element={<SharesPage />} />
+                    <Route path="/shareFavList" element={<SharesFavPage />} />
                     <Route path="/CadastroUsuarios" element={<CadastroUsuario />} />
                 </Routes>
             </div>

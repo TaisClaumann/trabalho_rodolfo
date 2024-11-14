@@ -3,14 +3,14 @@ import { LoginData } from '../Interfaces/LoginData';
 import { Usuario } from '../Interfaces/Usuario';
 
 const apiClient = axios.create({
-    baseURL: 'https://cqdz4sb6-5165.brs.devtunnels.ms/',
+    baseURL: 'https://x1vxxxvv-5165.brs.devtunnels.ms',
     headers: {
         'Content-Type': 'application/json'
     }
 })
 
 export const LoginAPI = (loginData: LoginData) => {
-    return apiClient.post('/Login/login', loginData)
+    return apiClient.post('/api/Login/login', loginData)
 }
 
 export const CriarUsuario = (dadosUsuario: Usuario) => {
@@ -62,18 +62,19 @@ export const buscarAcoes = async (page: number, resultsByPage: number) => {
     }
 }
 
-export const listarAcoes = async () => {
+export const buscarAcoesFavoritas = async (page: number, resultsByPage: number) => {
     try {
-        const response = await apiClient.get(`/Share`,
+        const response = await apiClient.get(`/Share/${page}, ${resultsByPage}`,
             {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                 }
             }
         );
+        console.log(response);
         return response.data;
     } catch (error) {
-        console.error('Erro ao retornar a lista completa de ações: ', error);
+        console.error('Erro ao retornar lista de ações paginada: ', error);
         throw error;
     }
 }

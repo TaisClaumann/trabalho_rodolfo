@@ -21,7 +21,6 @@ const Login = () => {
         try {
             const response = await LoginAPI(loginData);
             if (response.data && response.status === 200) {
-                alert('Login realizado com sucesso');
                 sessionStorage.setItem('token', response.data.token);
             } else {
                 alert('Falha no login');

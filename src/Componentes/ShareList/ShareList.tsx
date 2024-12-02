@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
-import {buscarAcoesFavoritas} from "../../Servicos/MercadoFacilAPI";
+import {buscarAcoes} from "../../Servicos/MercadoFacilAPI";
 import AcaoDisplay from '../ShareDisplay/ShareDisplay';
-
-interface Acao {
-  symbol: string;
-  logourl: string;
-  shortName: string;
-  currency: string;
-  regularMarketPrice: number;
-  regularMarketDayRange: string;
-  regularMarketDayHigh: number;
-}
+import {AcaoProps} from "../../Interfaces/AcaoProps.ts";
 
 const ShareList: React.FC = () => {
-  const [acoes, setAcoes] = useState<Acao[]>([]);
+  const [acoes, setAcoes] = useState<AcaoProps[]>([]);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const resultsByPage = 8;
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  const handleToggleFavorite = (symbol: string) => {
+    setFavorites((prevFavorites) => {
+      const updatedFavorites = prevFavorites.includes(symbol)
+          ? prevFavorites.filter((fav) => fav !== symbol)
+          : [...prevFavorites, symbol];
+
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
 
   useEffect(() => {
     const fetchAcoes = async () => {
       try {
         setLoading(true);
-        const data = await buscarAcoesFavoritas(page, resultsByPage);
+        const data = await buscarAcoes(page, resultsByPage);
 
         setAcoes(data.items);
         setTotalRecords(data.totalCount);
@@ -36,6 +39,10 @@ const ShareList: React.FC = () => {
     };
 
     fetchAcoes();
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
   }, [page, resultsByPage]);
 
   const onPageChange = (newPage: number) => {
@@ -56,12 +63,14 @@ const ShareList: React.FC = () => {
               <div key={acao.symbol} className="flex justify-center">
                 <AcaoDisplay
                     symbol={acao.symbol}
-                    logoUrl={acao.logourl}
+                    logourl={acao.logourl}
                     shortName={acao.shortName}
                     currency={acao.currency}
                     regularMarketPrice={acao.regularMarketPrice}
                     regularMarketDayRange={acao.regularMarketDayRange}
                     regularMarketDayHigh={acao.regularMarketDayHigh}
+                    onToggleFavorite={handleToggleFavorite}
+                    isFavorite={favorites.includes(acao.symbol)}
                 />
               </div>
           ))}

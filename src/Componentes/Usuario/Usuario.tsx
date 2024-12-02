@@ -12,7 +12,6 @@ const Usuario = () => {
         console.log(data);
         try {
             await CriarUsuario(data);
-            // Aqui você pode adicionar um feedback ao usuário após o envio.
         } catch (error) {
             console.error(error);
         }

@@ -7,9 +7,26 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  const handleToggleFavorite = (symbol: string) => {
+    setFavorites((prevFavorites) => {
+      const updatedFavorites = prevFavorites.includes(symbol)
+          ? prevFavorites.filter((fav) => fav !== symbol)
+          : [...prevFavorites, symbol];
+
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
+
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
 
     const fetchData = async () => {
       try {
@@ -23,10 +40,15 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
         ]);
 
         clearTimeout(timer);
-        setData(data);
-        setLoading(false);
+
+        // Verifique se o status da resposta é 204 ou se o JSON está vazio
+        if (!data || Object.keys(data).length === 0) {
+          setError("Ação não encontrada");
+        } else {
+          setData(data);
+        }
       } catch (err: any) {
-          setError(err.message);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -46,7 +68,7 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
   if (error) {
     return (
         <div className="flex items-center justify-center h-full">
-          <span className="text-lg text-red-500">Error: {error}</span>
+          <span className="text-lg text-red-500">{error}</span>
         </div>
     );
   }
@@ -54,13 +76,15 @@ const Acao: React.FC<ShareProps> = ({ symbol }) => {
   return (
       <div className="p-4 rounded-lg shadow-md">
         <AcaoDisplay
-            logoUrl={data?.logourl}
+            logourl={data?.logourl}
             symbol={data?.symbol}
             shortName={data?.shortName}
             currency={data?.currency}
             regularMarketPrice={data?.regularMarketPrice}
             regularMarketDayRange={data?.regularMarketDayRange}
             regularMarketDayHigh={data?.regularMarketDayHigh}
+            onToggleFavorite={handleToggleFavorite}
+            isFavorite={favorites.includes(data.symbol)}
         />
       </div>
   );

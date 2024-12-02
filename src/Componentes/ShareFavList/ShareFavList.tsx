@@ -1,33 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { buscarAcoes } from "../../Servicos/MercadoFacilAPI";
-import AcaoDisplay from '../ShareDisplay/ShareDisplay';
-
-interface Acao {
-  symbol: string;
-  logourl: string;
-  shortName: string;
-  currency: string;
-  regularMarketPrice: number;
-  regularMarketDayRange: string;
-  regularMarketDayHigh: number;
-}
+import { getAcaoPorCodigo } from "../../Servicos/MercadoFacilAPI";
+import AcaoDisplay from "../ShareDisplay/ShareDisplay";
+import { AcaoProps } from "../../Interfaces/AcaoProps.ts";
 
 const ShareFavList: React.FC = () => {
-  const [acoes, setAcoes] = useState<Acao[]>([]);
+  const [acoes, setAcoes] = useState<AcaoProps[]>([]);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const resultsByPage = 8;
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  const handleToggleFavorite = (symbol: string) => {
+    setFavorites((prevFavorites) => {
+      const updatedFavorites = prevFavorites.includes(symbol)
+          ? prevFavorites.filter((fav) => fav !== symbol)
+          : [...prevFavorites, symbol];
+
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
 
   useEffect(() => {
     const fetchAcoes = async () => {
       try {
         setLoading(true);
-        const data = await buscarAcoes(page, resultsByPage);
+        const fetchedAcoes: AcaoProps[] = [];
+        
+        for (const f of favorites) {
+          const data = await getAcaoPorCodigo(f);
 
-        setAcoes(data.items);
-        setTotalRecords(data.totalCount);
+          if (!data || Object.keys(data).length === 0) {
+            setError("Ação não encontrada");
+            return;
+          }
+          fetchedAcoes.push(data);
+        }
+
+        setAcoes(fetchedAcoes);
+        setTotalRecords(fetchedAcoes.length);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -36,7 +49,12 @@ const ShareFavList: React.FC = () => {
     };
 
     fetchAcoes();
-  }, [page, resultsByPage]);
+
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, [page, resultsByPage, favorites]);
 
   const onPageChange = (newPage: number) => {
     setPage(newPage);
@@ -56,12 +74,14 @@ const ShareFavList: React.FC = () => {
               <div key={acao.symbol} className="flex justify-center">
                 <AcaoDisplay
                     symbol={acao.symbol}
-                    logoUrl={acao.logourl}
+                    logourl={acao.logourl}
                     shortName={acao.shortName}
                     currency={acao.currency}
                     regularMarketPrice={acao.regularMarketPrice}
                     regularMarketDayRange={acao.regularMarketDayRange}
                     regularMarketDayHigh={acao.regularMarketDayHigh}
+                    onToggleFavorite={handleToggleFavorite}
+                    isFavorite={favorites.includes(acao.symbol)}
                 />
               </div>
           ))}
